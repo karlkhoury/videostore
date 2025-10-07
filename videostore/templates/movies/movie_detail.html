@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ movie.MovieTitle }}</h2>
+<p><b>Director:</b> {{ movie.DirectorName }}</p>
+<p><b>Cast:</b> {{ movie.Actor1Name }}{% if movie.Actor2Name %}, {{ movie.Actor2Name }}{% endif %}</p>
+<p><b>Genre:</b> {{ movie.MovieGenre }}</p>
+<p><b>Year:</b> {{ movie.ReleaseYear }}</p>
+<p><a href="{% url 'movies:update' movie.pk %}">Edit</a></p>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Movies</h2>
+
+<div class="toolbar">
+  <input id="searchInput" type="text" placeholder="Search title, director, actor…" />
+  {% regroup movies by MovieGenre as genre_list %}
+  <select id="genreSelect">
+    <option value="">All genres</option>
+    {% for g in genre_list %}
+      <option value="{{ g.grouper }}">{{ g.grouper }}</option>
+    {% endfor %}
+  </select>
+  <select id="sortSelect" title="Sort">
+    <option value="title">Sort: Title A→Z</option>
+    <option value="year">Sort: Year ↑</option>
+  </select>
+</div>
+
+<ul id="movieList" class="cards">
+  {% for m in movies %}
+    <li class="card"
+        data-title="{{ m.MovieTitle|lower }}"
+        data-genre="{{ m.MovieGenre|lower }}"
+        data-year="{{ m.ReleaseYear }}"
+        data-cast="{{ m.Actor1Name|lower }} {{ m.Actor2Name|lower }}"
+        data-director="{{ m.DirectorName|lower }}">
+      <div class="card-body">
+        <h3 class="card-title">
+          <a href="{% url 'movies:detail' m.pk %}">{{ m.MovieTitle }}</a>
+        </h3>
+        <p class="muted">
+          {{ m.MovieGenre }} · {{ m.ReleaseYear }}<br>
+          Dir: {{ m.DirectorName }}{% if m.Actor1Name %} · Cast: {{ m.Actor1Name }}{% if m.Actor2Name %}, {{ m.Actor2Name }}{% endif %}{% endif %}
+        </p>
+        <div class="actions">
+          <a class="btn" href="{% url 'movies:update' m.pk %}">Edit</a>
+          <a class="btn danger" href="{% url 'movies:delete' m.pk %}">Delete</a>
+        </div>
+      </div>
+    </li>
+  {% empty %}
+    <li>No movies yet. <a href="{% url 'movies:create' %}">Add one</a>.</li>
+  {% endfor %}
+</ul>
+
+<p id="emptyState" class="muted" style="display:none">No matches.</p>
+{% endblock %}
