@@ -28,15 +28,17 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 bat '''
-		REM=== Ensure Jenkins uses Minikube's Kubernetes context ===
-		set KUBECONFIG=%HOMEPATH%\\.kube\\config
-		kubectl config use-context minikube
-
-                REM === Apply deployment and service ===
+		        REM === Use the correct Minikube kubeconfig path ===
+                set KUBECONFIG=C:\\Users\\karl\\.kube\\config
+                
+		        REM === Confirm the Minikube context exists ===
+                kubectl config use-context minikube
+    
+                REM === Apply manifests ===
                 kubectl apply -f videostore/deployment.yaml
                 kubectl apply -f videostore/service.yaml
 
-                REM === Ensure the rollout completes ===
+                REM === Wait for rollout ===
                 kubectl rollout status deployment/django-deployment
                 '''
             }
