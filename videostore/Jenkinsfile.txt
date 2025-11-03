@@ -28,7 +28,11 @@ pipeline {
         stage('Deploy to Minikube') {
             steps {
                 bat '''
-                REM === Apply the updated deployment manifest ===
+		REM=== Ensure Jenkins uses Minikube's Kubernetes context ===
+		set KUBECONFIG=%HOMEPATH%\\.kube\\config
+		kubectl config use-context minikube
+
+                REM === Apply deployment and service ===
                 kubectl apply -f videostore/deployment.yaml
                 kubectl apply -f videostore/service.yaml
 
