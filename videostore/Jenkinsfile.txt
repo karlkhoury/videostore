@@ -29,8 +29,8 @@ pipeline {
             steps {
                 bat '''
                 REM === Apply the updated deployment manifest ===
-                kubectl apply -f deployment.yaml
-                kubectl apply -f service.yaml
+                kubectl apply -f videostore/deployment.yaml
+                kubectl apply -f videostore/service.yaml
 
                 REM === Ensure the rollout completes ===
                 kubectl rollout status deployment/django-deployment
